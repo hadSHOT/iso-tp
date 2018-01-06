@@ -1,12 +1,8 @@
-#include <mcp_can.h>
-#include <mcp_can_dfs.h>
-#include <SPI.h>
+
+#include <due_can.h>
 #include <iso-tp.h>
 
-#define MCP_INT 2
-
-MCP_CAN CAN0(10);
-IsoTp isotp(&CAN0,MCP_INT);
+IsoTp isotp(&Can0);
 
 struct Message_t TxMsg, RxMsg;
 uint8_t sf_test[] = { 0x00, 0x01 };
@@ -17,9 +13,9 @@ uint32_t can_id = 0x7E0;
 void setup()
 {
   Serial.begin(1000000);
-	pinMode(MCP_INT, INPUT);
-  CAN0.begin(MCP_ANY, CAN_500KBPS, MCP_8MHZ);
-  CAN0.setMode(MCP_NORMAL);
+	Can0.enable();
+  Can0.begin(500000, 255); //enable bus at 500k speed
+  Can0.watchFor(); //allow all traffic through
 }
 
 void loop()

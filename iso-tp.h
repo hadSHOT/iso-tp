@@ -1,9 +1,12 @@
 #ifndef _ISOTP_H
 #define _ISOTP_H
 
-#include <mcp_can.h>
+#include <can_common.h>
 
 //#define ISO_TP_DEBUG
+#define Serial SerialUSB   //uncomment this line to redirect debugging traffic to SerialUSB
+
+#define FILL_CHAR 0xAA  //unused bytes in frames will be filled with this value.
 
 typedef enum {
   ISOTP_IDLE = 0,
@@ -38,8 +41,17 @@ typedef enum {
 #define TIMEOUT_CF       250 /* Timeout between CFs                          */
 #define MAX_FCWAIT_FRAME  10   
 
-#define MAX_MSGBUF 128    /* Received Message Buffer. Depends on uC ressources!
-                             Should be enough for our needs */
+
+/* Received Message Buffer. An ISOTP frame
+can be as large as 4096 bytes but chances are 
+you won't often see messages of that size.
+Size this according to your microprocessor
+and the type of ISO-TP frames you need. 128
+is large enough unless you're going to do firmware
+uploads or some other large message task.
+*/
+#define MAX_MSGBUF 128    
+
 struct Message_t
 {
   uint8_t len=0;
@@ -56,16 +68,13 @@ struct Message_t
 class IsoTp
 {
 	public:
-		IsoTp(MCP_CAN* bus, uint8_t mcp_int);
+		IsoTp(CAN_COMMON* bus);
 		uint8_t send(Message_t* msg);
 		uint8_t receive(Message_t* msg);
 		void    print_buffer(uint32_t id, uint8_t *buffer, uint16_t len);
 	private:
-		MCP_CAN* _bus;
-                uint8_t  _mcp_int;
-		uint32_t rxId;
-		uint8_t  rxLen;
-		uint8_t  rxBuffer[8];
+		CAN_COMMON* _bus;
+		CAN_FRAME rcvFrame;
     uint16_t rest;
 		uint8_t  fc_wait_frames=0;
 		uint32_t wait_fc=0;
