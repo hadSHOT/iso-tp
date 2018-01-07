@@ -1,8 +1,13 @@
 ISO 15765-2 ISO-TP protocol implementation for Arduino
 
-This implementation requires MCP_CAN_lib from
+This implementation requires a can_common based CAN driver. Currently
+two such drivers exist:
 
-https://github.com/coryjfowler/MCP_CAN_lib with debug output disabled.
+https://github.com/collin80/due_can
+https://github.com/collin80/mcp2515
+
+You need can_common too:
+https://github.com/collin80/can_common
 
 Currently implemented:
 
