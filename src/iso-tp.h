@@ -4,7 +4,7 @@
 #include <can_common.h>
 
 //#define ISO_TP_DEBUG
-#define Serial SerialUSB   //uncomment this line to redirect debugging traffic to SerialUSB
+//#define Serial SerialUSB   //uncomment this line to redirect debugging traffic to SerialUSB
 
 #define FILL_CHAR 0xAA  //unused bytes in frames will be filled with this value.
 

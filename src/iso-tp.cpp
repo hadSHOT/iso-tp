@@ -286,8 +286,7 @@ uint8_t IsoTp::can_send(uint32_t id, uint8_t len, uint8_t *data)
 
 uint8_t IsoTp::can_receive(void)
 {
-
-    if (_bus->rx_avail())
+    if (_bus->rx_avail() > 0)
     {
         memset(&rcvFrame.data.value,FILL_CHAR,8);
         _bus->read(rcvFrame);
