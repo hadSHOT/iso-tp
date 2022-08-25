@@ -57,7 +57,7 @@ uint8_t IsoTp::send(Message_t* msg)
 #ifdef ISO_TP_DEBUG
                 Serial.println(F("Send SF"));
 #endif
-                retval=send_sf(msg);
+                retval = send_sf(msg);
                 msg->tp_state=ISOTP_IDLE;
             }
             else
@@ -65,13 +65,13 @@ uint8_t IsoTp::send(Message_t* msg)
 #ifdef ISO_TP_DEBUG
                 Serial.println(F("Send FF"));
 #endif
-                if(!(retval=send_ff(msg)))   // FF complete
+                if((retval = send_ff(msg)))   // FF complete
                 {
                     msg->Buffer+=6;
                     msg->len-=6;
                     msg->tp_state=ISOTP_WAIT_FIRST_FC;
                     fc_wait_frames=0;
-                    wait_fc=millis();
+                    wait_fc = millis();
                 }
             }
             break;
@@ -102,10 +102,10 @@ uint8_t IsoTp::send(Message_t* msg)
 #ifdef ISO_TP_DEBUG
             Serial.println(F("Send CF"));
 #endif
-            while(msg->len>7 & !bs)
+            while(msg->len>7 && !bs)
             {
                 fc_delay(msg->min_sep_time);
-                if(!(retval=send_cf(msg)))
+                if((retval=send_cf(msg)))
                 {
 #ifdef ISO_TP_DEBUG
                     Serial.print(F("Send Seq "));
@@ -311,7 +311,7 @@ uint8_t IsoTp::can_receive(void)
 
 uint8_t IsoTp::send_fc(struct Message_t *msg)
 {
-    uint8_t TxBuf[8]= {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    uint8_t TxBuf[8]= {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; 
     // FC message high nibble = 0x3 , low nibble = FC Status
     TxBuf[0]=(N_PCI_FC | msg->fc_status);
     TxBuf[1]=msg->blocksize;
